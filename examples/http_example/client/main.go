@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"log"
-	"time"
 
 	"github.com/davecgh/go-spew/spew"
 	mcp_golang "github.com/metoro-io/mcp-golang"
@@ -13,7 +12,7 @@ import (
 func main() {
 	// Create an HTTP transport that connects to the server
 	transport := http.NewHTTPClientTransport("/mcp")
-	transport.WithBaseURL("http://localhost:8081")
+	transport.WithBaseURL("http://localhost:8000")
 
 	// Create a new client with the transport
 	client := mcp_golang.NewClient(transport)
@@ -40,26 +39,27 @@ func main() {
 		log.Printf("Tool: %s. Description: %s", tool.Name, desc)
 	}
 
-	// Call the time tool with different formats
-	formats := []string{
-		time.RFC3339,
-		"2006-01-02 15:04:05",
-		"Mon, 02 Jan 2006",
-	}
+	// TODO: use some tool we found, not the 'time' tool
+	// // Call the time tool with different formats
+	// formats := []string{
+	// 	time.RFC3339,
+	// 	"2006-01-02 15:04:05",
+	// 	"Mon, 02 Jan 2006",
+	// }
 
-	for _, format := range formats {
-		args := map[string]interface{}{
-			"format": format,
-		}
+	// for _, format := range formats {
+	// 	args := map[string]interface{}{
+	// 		"format": format,
+	// 	}
 
-		response, err := client.CallTool(context.Background(), "time", args)
-		if err != nil {
-			log.Printf("Failed to call time tool: %v", err)
-			continue
-		}
+	// 	response, err := client.CallTool(context.Background(), "time", args)
+	// 	if err != nil {
+	// 		log.Printf("Failed to call time tool: %v", err)
+	// 		continue
+	// 	}
 
-		if len(response.Content) > 0 && response.Content[0].TextContent != nil {
-			log.Printf("Time in format %q: %s", format, response.Content[0].TextContent.Text)
-		}
-	}
+	// 	if len(response.Content) > 0 && response.Content[0].TextContent != nil {
+	// 		log.Printf("Time in format %q: %s", format, response.Content[0].TextContent.Text)
+	// 	}
+	// }
 }
