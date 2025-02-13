@@ -36,8 +36,20 @@ func (c *Client) Initialize(ctx context.Context) (*InitializeResponse, error) {
 		return nil, errors.Wrap(err, "failed to connect transport")
 	}
 
-	// Make initialize request to server
-	response, err := c.protocol.Request(ctx, "initialize", map[string]interface{}{}, nil)
+	params := initializeRequestParams{
+		Capabilities: ClientCapabilities{
+			Experimental: make(map[string]map[string]interface{}),
+			Roots:        &ClientCapabilitiesRoots{},
+			Sampling:     make(map[string]interface{}),
+		},
+		ClientInfo: implementation{
+			Name:    "mcp-golang",
+			Version: "0.8.0",
+		},
+		ProtocolVersion: "2024-11-05",
+	}
+
+	response, err := c.protocol.Request(ctx, "initialize", params, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to initialize")
 	}
